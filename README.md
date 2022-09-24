@@ -8,3 +8,5 @@ Install `canvas-sketch-cli`
 ```shell
 npm i canvas-sketch-cli -g
 ```
+
+![example image generated from sketch-01](out/sketch-01.png "example image generated from sketch-01")

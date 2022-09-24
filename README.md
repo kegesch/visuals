@@ -13,3 +13,6 @@ Generated with `canvas-sketch`
 
 ## Sketch 2
 ![example image generated from sketch-02](out/sketch-02.png "example image generated from sketch-02")
+
+Task to only show a quater
+![example image generated from sketch-02-02](out/sketch-02-02.png "example image generated from sketch-02-02")

@@ -12,8 +12,8 @@ const sketch = () => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
-    const cx = width * 0.5;
-    const cy = height * 0.5;
+    const cx = width;
+    const cy = height;
     const w = width * 0.01;
     const h = height * 0.1;
 
@@ -21,7 +21,7 @@ const sketch = () => {
 
     const num = 40
 
-    const radius = width * 0.3;
+    const radius = width ;
     context.strokeStyle = 'black'
     context.fillStyle = 'black';
     for(let i = 0; i < num; i++) {

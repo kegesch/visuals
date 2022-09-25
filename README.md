@@ -31,3 +31,11 @@ cd sketches
 canvas-sketch sketch-03.js
 ```
 ![example image generated from sketch-03](out/sketch-03.gif "example image generated from sketch-03")
+
+## Sketch 4
+```
+cd sketches
+canvas-sketch sketch-04.js
+```
+![example image generated from sketch-04](out/sketch-04.gif "example image generated from sketch-04")
+![example image generated from sketch-04](out/sketch-04.png "example image generated from sketch-04")

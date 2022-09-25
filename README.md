@@ -39,3 +39,10 @@ canvas-sketch sketch-04.js
 ```
 ![example image generated from sketch-04](out/sketch-04.gif "example image generated from sketch-04")
 ![example image generated from sketch-04](out/sketch-04.png "example image generated from sketch-04")
+
+## Sketch 5
+```
+cd sketches
+canvas-sketch sketch-05.js
+```
+![example image generated from sketch-05](out/sketch-05.png "example image generated from sketch-05")

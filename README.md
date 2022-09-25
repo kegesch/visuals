@@ -24,3 +24,10 @@ canvas-sketch sketch-02.js
 
 Task to only show a quater
 ![example image generated from sketch-02-02](out/sketch-02-02.png "example image generated from sketch-02-02")
+
+## Sketch 3
+```
+cd sketches
+canvas-sketch sketch-03.js
+```
+![example image generated from sketch-03](out/sketch-03.gif "example image generated from sketch-03")

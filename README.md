@@ -46,3 +46,11 @@ cd sketches
 canvas-sketch sketch-05.js
 ```
 ![example image generated from sketch-05](out/sketch-05.png "example image generated from sketch-05")
+
+## Final Sketch
+```
+cd sketches
+canvas-sketch final-sketch.js
+```
+![example image generated from final-sketch](out/final-sketch-01.png "example image generated from final-sketch")
+![example image generated from final-sketch](out/final-sketch-02.png "example image generated from final-sketch")

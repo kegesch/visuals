@@ -1,0 +1,23 @@
+{
+  "name": "visuals",
+  "version": "1.0.0",
+  "description": "Basic html canvas operations\r ![example image generated from one.html](one/one.png \"example image generated from one.html\")",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kegesch/visuals.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kegesch/visuals/issues"
+  },
+  "homepage": "https://github.com/kegesch/visuals#readme",
+  "dependencies": {
+    "canvas-sketch": "^0.7.6"
+  }
+}

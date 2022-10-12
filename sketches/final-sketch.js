@@ -62,8 +62,16 @@ const sketch = ({width, height}) => {
     context.fillStyle = '#FAF0D7';
     context.fillRect(0, 0, width, height);
   
-    context.putImageData(imageDataBackground, 0, 0)
+    context.putImageData(imageDataBackground, 0, 0)  
   
+    let patchesData = patchesContext.getImageData(0,0,width, height).data
+    for (let i = 0; i < patchesData.length; i+=4) {
+      let newColor = decrease_brightness(patchesData[i], patchesData[i+1], patchesData[i+2], 99)
+      patchesData[i] = newColor[0];
+      patchesData[i+1] = newColor[1];
+      patchesData[i+2] = newColor[2];
+    }
+    patchesContext.putImageData(new ImageData(patchesData, width, height), 0, 0)
 
     patchesContext.save()
     patchesContext.translate(width / 2, height / 2)
@@ -164,7 +172,6 @@ class Patch {
 
     context.beginPath()
     const alpha = decimalToHexString(Math.floor(this.opacity * 255));
-    console.log(`${blendedColor}${alpha}`)
     context.fillStyle = `${blendedColor}${alpha}`
     context.arc(0, 0, this.radius, 0, Math.PI * 2)
     context.fill()
@@ -239,10 +246,70 @@ function mix_cmyks(...cmyks) {
 
 function mix_hexes(...hexes) {
   let rgbs = hexes.map(hex => hex2dec(hex)); 
-  console.log(rgbs)
   let cmyks = rgbs.map(rgb => rgb2cmyk(...rgb));
   let mixture_cmyk = mix_cmyks(...cmyks);
   let mixture_rgb = cmyk2rgb(...mixture_cmyk);
   let mixture_hex = rgb2hex(...mixture_rgb);
   return mixture_hex;
+}
+
+function rgbToHsl(r, g, b){
+  r /= 255, g /= 255, b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+
+  if(max == min){
+      h = s = 0; // achromatic
+  }else{
+      var d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch(max){
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+  }
+
+  return [h, s, l];
+}
+
+function decrease_brightness(r,g,b, percent) {
+  console.log(`${r}${g}${b}${percent}`)
+  let hsl = rgbToHsl(r,g,b)
+  let newBrightness = hsl[2] - hsl[2] * (percent / 100)
+  return hslToRgb(hsl[0], hsl[1], newBrightness)
+}
+
+function decrease_brightness_hex(hex, percent) {
+  let rgbs = hex2dec(hex)
+  let hsl = rgbToHsl(...rgbs)
+  let newBrightness = hsl[2] - hsl[2] * (percent / 100)
+  let newRgbs = hslToRgb(hsl[0], hsl[1], newBrightness)
+  return rgb2hex(...newRgbs)
+}
+
+function hslToRgb(h, s, l){
+  var r, g, b;
+
+  if(s == 0){
+      r = g = b = l; // achromatic
+  }else{
+      function hue2rgb(p, q, t){
+          if(t < 0) t += 1;
+          if(t > 1) t -= 1;
+          if(t < 1/6) return p + (q - p) * 6 * t;
+          if(t < 1/2) return q;
+          if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+      }
+
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      var p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+  }
+
+  return [r * 255, g * 255, b * 255];
 }

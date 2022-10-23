@@ -1,6 +1,7 @@
 const canvasSketch = require('canvas-sketch');
 const random = require('canvas-sketch-util/random');
 const Color = require('canvas-sketch-util/color');
+const { degToRad } = require('canvas-sketch-util/math');
 const Tweakpane = require('tweakpane');
 
 
@@ -27,11 +28,14 @@ const redColors = [
     "#F47C7C"
 ]
 
-const colors = redColors
+const colors = greenColors
 
 let params = {
     linesCount: 10,
     maxGapCount: 3,
+    rotation: 0,
+    yTranslate: 0,
+    xTranslate: 0,
 }
 
 const sketch = async () => {
@@ -49,6 +53,8 @@ const sketch = async () => {
       })
 
       segments.sort((segA, segB) => segA.startY - segB.startY)
+      context.translate(params.xTranslate, params.yTranslate)
+      context.rotate(degToRad(params.rotation))
       segments.forEach(seg => seg.draw(context, width, height))
 
   };
@@ -56,13 +62,16 @@ const sketch = async () => {
 
 let canvasManager
 
-const createPane = () => {
+const createPane = (dimensions) => {
     const pane = new Tweakpane.Pane()
     let folder
 
     folder = pane.addFolder({title: 'Lines'})
     folder.addInput(params, 'linesCount', { min: 1, max: 100, step: 1})
     folder.addInput(params, 'maxGapCount', { min: 1, max: 10, step: 1})
+    folder.addInput(params, 'rotation', { min: 0, max: 180, step: 10 })
+    folder.addInput(params, 'xTranslate', { min: -1 * dimensions[0], max: dimensions[0], step: 100 })
+    folder.addInput(params, 'yTranslate', { min: -1 * dimensions[1], max: dimensions[1], step: 100 })
 
     const btn = pane.addButton({
         title: 'Increment',
@@ -74,15 +83,21 @@ const createPane = () => {
 
 const start = async () => {
     canvasManager = await canvasSketch(sketch, settings);
-    createPane()
+    createPane(settings.dimensions)
 }
 
 start()
+
+const gapHeightFactors = [0.02, 0.05, 0.1, 0.2, 0.5, 0.9]
+const gapWidthFactors = [0.08, 0.1, 0.2, 0.2, 0.4, 0.5]
+const gapRandomWeights = gapHeightFactors.map((_, index) => Math.pow(2, gapHeightFactors.length - index))
+
 class Gap {
     static newRandom(width, height) {
-        let gapHeight = random.range(height * 0.02, height * 0.1)
+        let randomIndex = random.weighted(gapRandomWeights)
+        let gapHeight = gapHeightFactors[randomIndex] * height // random.range(height * 0.02, height * 0.1)
         let gapOffsetX = random.range(0.2, 0.8) * width
-        let gapWidth = random.range(0.08, 0.1) * width
+        let gapWidth = gapWidthFactors[randomIndex] * width //random.range(0.08, 0.1) * width
         return new Gap(gapOffsetX, gapWidth, gapHeight)
     }
     constructor(gapOffsetX, gapWidth, gapHeight) {
@@ -101,7 +116,7 @@ class LineSegement {
 
         let gapsCount = parseInt(random.range(1, params.maxGapCount), 10)
         let gaps = Array.Enumerate(gapsCount).map(i => Gap.newRandom(width, height))
-        let isDownwards = random.chance()
+        let isDownwards = false //random.chance()
         let colorSelection = isDownwards ? redColors : greenColors
         let availableColors = [colorSelection[1], colorSelection[2], colorSelection[3]]
         let color = Color.blend(colors[0], random.pick(availableColors), 0.8)
